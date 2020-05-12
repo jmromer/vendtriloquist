@@ -23,8 +23,12 @@ class PaymentMenu < ApplicationMenu
     options[input]
   end
 
+  # The integer value of the selected payment
+  def payment_value
+    currency.to_int(selected_payment)
+  end
+
   def dispatch
-    payment_value = currency.to_int(selected_payment)
     self.result_message = payment.process!(value: payment_value)
     raise ReturnToMain, result_message
   rescue InsufficientChange, PaymentFailure => e

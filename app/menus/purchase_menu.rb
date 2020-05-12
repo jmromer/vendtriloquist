@@ -7,11 +7,12 @@ require "menus/payment_menu"
 class PurchaseMenu < ApplicationMenu
   alias selected_bin selection
 
-  protected
-
-  def decorator
-    PurchaseBinDecorator.new
+  def initialize(printer:, source: :main_menu)
+    super
+    self.decorator = PurchaseBinDecorator.new
   end
+
+  protected
 
   def make_selection
     selected_bin = Bin.find_by_index(input)&.decorated

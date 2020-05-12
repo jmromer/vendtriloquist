@@ -44,7 +44,9 @@ class Bin < ApplicationRecord
         stockings.create!(product: product)
       end
     end
+    true
   rescue ActiveRecord::RecordInvalid
+    false
   end
 
   def index

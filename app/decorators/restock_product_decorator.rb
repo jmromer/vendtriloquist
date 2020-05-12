@@ -21,9 +21,8 @@ class RestockProductDecorator < ApplicationDecorator
   def options_hash_entry(index)
     [
       index.to_s,
-     [self,
-      "(#{color.option(index)}) #{color.default(name)}"
-     ]
+      [self,
+       "(#{color.option(index)}) #{color.default(name)}"],
     ]
   end
 
@@ -32,5 +31,9 @@ class RestockProductDecorator < ApplicationDecorator
       Filling bin #{bin_index} with #{product_name}...
       #{color.success("Bin #{bin_index} is filled.")}
     STR
+  end
+
+  def failure_message(bin_index)
+    color.error("Sorry, bin #{bin_index} could not be filled.")
   end
 end

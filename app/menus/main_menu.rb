@@ -5,11 +5,12 @@ require "menus/application_menu"
 require "utils/errors"
 
 class MainMenu < ApplicationMenu
-  protected
-
-  def decorator
-    MainMenuDecorator.new
+  def initialize(source: nil, printer:)
+    super
+    self.decorator = MainMenuDecorator.new
   end
+
+  protected
 
   def make_selection
     options[input&.downcase]

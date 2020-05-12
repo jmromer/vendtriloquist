@@ -5,10 +5,11 @@ require "menus/application_menu"
 require "menus/restock_product_menu"
 
 class RestockBinMenu < ApplicationMenu
-  alias bin selection
+  alias selected_bin selection
 
-  def decorator
-    RestockBinDecorator.new
+  def initialize(printer:, source: :main_menu)
+    super
+    self.decorator = RestockBinDecorator.new
   end
 
   protected
@@ -22,6 +23,9 @@ class RestockBinMenu < ApplicationMenu
   end
 
   def dispatch
-    RestockProductMenu.new(bin: bin.obj, printer: out).read
+    RestockProductMenu.new(
+      bin: selected_bin.obj,
+      printer: out,
+    ).read
   end
 end
