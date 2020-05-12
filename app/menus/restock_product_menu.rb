@@ -9,7 +9,7 @@ class RestockProductMenu < ApplicationMenu
 
   def initialize(bin:, printer:, source: :restock_menu)
     super(printer: printer, source: source)
-    self.decorator = RestockProductDecorator.new
+    self.decorator = RestockProductDecorator.new(selected_bin: bin)
     self.selected_bin = bin
   end
 
@@ -26,13 +26,10 @@ class RestockProductMenu < ApplicationMenu
   end
 
   def dispatch
-    message =
-      if selected_bin.fill(product: selected_product.obj)
-        decorator.success_message(selected_bin.index, selected_product.name)
-      else
-        decorator.failure_message(selected_bin.index)
-      end
-
+    message = decorator.refill_complete_message(
+      product: selected_product,
+      is_success: selected_bin.fill(product: selected_product),
+    )
     raise ReturnToMain, message
   end
 end

@@ -22,12 +22,12 @@ class PurchaseMenu < ApplicationMenu
   def dispatch
     if selected_bin.sold_out?
       self.result_message = "Sold out. Please try another item."
-      nil
-    else
-      PaymentMenu.new(
-        purchase: selected_bin.next_in_stock,
-        printer: out,
-      ).read
+      return false
     end
+
+    PaymentMenu.new(
+      purchase: selected_bin.next_in_stock,
+      printer: out,
+    ).read
   end
 end
