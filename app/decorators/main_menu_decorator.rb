@@ -3,22 +3,22 @@
 require "decorators/application_decorator"
 
 class MainMenuDecorator < ApplicationDecorator
-  def self.options
+  def options
     @options ||= {
-      "1" => [:purchase, "Make a purchase"],
-      "2" => [:restock, "Add inventory"],
+      "1" => [:purchase_menu, "Make a purchase"],
+      "2" => [:restock_menu, "Add inventory"],
     }.freeze
   end
 
-  def self.options_message
+  def options_message
     [
-      Color.warning("Main menu"),
+      color.warning("Main menu"),
       "",
       options.map { |k, (_, v)| options_entry(k, v) }.join("\n"),
     ].join("\n")
   end
 
-  def self.options_entry(k, v)
-    "(#{Color.option(k)}) #{v}"
+  def options_entry(trigger, label)
+    "(#{color.option(trigger)}) #{label}"
   end
 end

@@ -2,23 +2,21 @@
 
 require "decorators/main_menu_decorator"
 require "menus/application_menu"
+require "utils/errors"
 
 class MainMenu < ApplicationMenu
+  def initialize(source: nil, printer:)
+    super
+    self.decorator = MainMenuDecorator.new
+  end
+
   protected
-
-  def options
-    MainMenuDecorator.options
-  end
-
-  def options_message
-    MainMenuDecorator.options_message
-  end
 
   def make_selection
     options[input&.downcase]
   end
 
   def dispatch
-    VendingMachine.public_send(selection)
+    raise Route, selection
   end
 end

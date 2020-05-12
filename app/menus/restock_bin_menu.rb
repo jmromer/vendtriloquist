@@ -2,19 +2,17 @@
 
 require "decorators/restock_bin_decorator"
 require "menus/application_menu"
+require "menus/restock_product_menu"
 
 class RestockBinMenu < ApplicationMenu
-  alias bin selection
+  alias selected_bin selection
+
+  def initialize(printer:, source: :main_menu)
+    super
+    self.decorator = RestockBinDecorator.new
+  end
 
   protected
-
-  def options
-    RestockBinDecorator.options
-  end
-
-  def options_message
-    RestockBinDecorator.options_message
-  end
 
   def menu_name
     "restock: select a bin"
@@ -25,6 +23,9 @@ class RestockBinMenu < ApplicationMenu
   end
 
   def dispatch
-    VendingMachine.restock_product(bin: bin)
+    RestockProductMenu.new(
+      bin: selected_bin.undecorated,
+      printer: out,
+    ).read
   end
 end

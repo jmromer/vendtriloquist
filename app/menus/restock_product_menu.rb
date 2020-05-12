@@ -5,24 +5,17 @@ require "menus/application_menu"
 require "utils/errors"
 
 class RestockProductMenu < ApplicationMenu
-  alias product selection
+  alias selected_product selection
 
-  def initialize(bin:)
-    super()
-    self.bin = bin.decorated
+  def initialize(bin:, printer:, source: :restock_menu)
+    super(printer: printer, source: source)
+    self.decorator = RestockProductDecorator.new(selected_bin: bin)
+    self.selected_bin = bin
   end
 
   protected
 
-  attr_accessor :bin
-
-  def options
-    RestockProductDecorator.options
-  end
-
-  def options_message
-    RestockProductDecorator.options_message
-  end
+  attr_accessor :selected_bin
 
   def menu_name
     "restock: select a product"
@@ -33,11 +26,10 @@ class RestockProductMenu < ApplicationMenu
   end
 
   def dispatch
-    bin.fill(product: product.undecorated)
-
-    raise ReturnToMainMenu, <<~STR
-      Filling bin #{bin} with #{product.name}...
-      #{Color.success("Bin #{bin} is filled.")}
-    STR
+    message = decorator.refill_complete_message(
+      product: selected_product,
+      is_success: selected_bin.fill(product: selected_product),
+    )
+    raise ReturnToMain, message
   end
 end

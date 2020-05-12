@@ -2,19 +2,17 @@
 
 require "decorators/purchase_bin_decorator"
 require "menus/application_menu"
+require "menus/payment_menu"
 
 class PurchaseMenu < ApplicationMenu
   alias selected_bin selection
 
+  def initialize(printer:, source: :main_menu)
+    super
+    self.decorator = PurchaseBinDecorator.new
+  end
+
   protected
-
-  def options
-    PurchaseBinDecorator.options
-  end
-
-  def options_message
-    PurchaseBinDecorator.options_message
-  end
 
   def make_selection
     selected_bin = Bin.find_by_index(input)&.decorated
@@ -23,12 +21,13 @@ class PurchaseMenu < ApplicationMenu
 
   def dispatch
     if selected_bin.sold_out?
-      self.result_message =
-        Color.warning("Sold out. Please try another item.")
-      nil
-    else
-      purchase = selected_bin.next_in_stock
-      VendingMachine.payment(purchase: purchase)
+      self.result_message = "Sold out. Please try another item."
+      return false
     end
+
+    PaymentMenu.new(
+      purchase: selected_bin.next_in_stock,
+      printer: out,
+    ).read
   end
 end

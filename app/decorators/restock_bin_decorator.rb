@@ -3,11 +3,21 @@
 require "decorators/bin_decorator"
 
 class RestockBinDecorator < BinDecorator
-  def self.options
-    super(Bin.below_capacity)
+  alias bin undecorated
+
+  delegate \
+    :capacity,
+    :in_stock_count,
+    to: :bin
+
+  def options
+    self.class
+      .decorate(Bin.below_capacity)
+      .map(&:options_hash_entry)
+      .to_h
   end
 
-  def self.options_message
+  def options_message
     [
       "Select a bin to refill:",
       "",
@@ -23,6 +33,6 @@ class RestockBinDecorator < BinDecorator
         "#{capacity - in_stock_count}/#{capacity} unfilled"
       end
 
-    [index, [self, "(#{Color.option(index)}) #{slack_amount}"]]
+    [index, [self, "(#{color.option(index)}) #{slack_amount}"]]
   end
 end

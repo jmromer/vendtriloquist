@@ -2,43 +2,35 @@
 # frozen_string_literal: true
 
 require "readline"
-require "utils/color"
 
 class ApplicationMenu
-  def initialize
-    self.result_message = result_message
-    self.out = VendingMachine.out
+  def initialize(source: nil, decorator: nil, printer:)
+    self.decorator = decorator
+    self.out = printer
+    self.source = source
     self.selected_option = []
     self.input = nil
   end
 
   def read
     loop do
-      if options&.empty?
-        out.puts Color.error("None available.")
-        break
-      end
+      raise ReturnToMain, no_options_message if options&.empty?
 
-      out.puts main_message
-      self.input = Readline.readline(prompt)&.strip
+      out.puts main_message(result_message)
+      self.input = Readline.readline(prompt(menu_name))&.strip
 
-      case input
-      when nil
-        out.puts
-        break
-      when "q", "Q"
-        raise Quit
-      else
-        Readline::HISTORY.push(input)
-        self.selected_option = make_selection
+      case input&.downcase
+      when nil then go_back
+      when "q" then quit
+      else process_input
       end
 
       if selection
-        out.puts(Color.default(valid_message))
+        out.puts(valid_message(selection_label))
         unwind = dispatch
         break if unwind
       else
-        out.puts(Color.error(invalid_message))
+        out.puts(invalid_message(input))
         next
       end
     end
@@ -47,16 +39,41 @@ class ApplicationMenu
   protected
 
   attr_accessor \
+    :decorator,
     :input,
     :result_message,
     :out,
     :selected_option,
+    :source,
+    :decorator,
     :success_message
 
-  def main_message
-    [result_message, options_message]
-      .compact
-      .join("\n\n")
+  delegate \
+    :currency,
+    :goodbye_message,
+    :invalid_message,
+    :main_message,
+    :no_options_message,
+    :options,
+    :options_message,
+    :prompt,
+    :prompt_options,
+    :valid_message,
+    to: :decorator
+
+  def process_input
+    Readline::HISTORY.push(input)
+    self.selected_option = make_selection
+  end
+
+  def go_back
+    out.puts
+    raise Back, source
+  end
+
+  def quit
+    out.puts goodbye_message
+    raise Quit
   end
 
   def selection
@@ -67,21 +84,6 @@ class ApplicationMenu
     selected_option&.last
   end
 
-  def prompt
-    [
-      prompt_options,
-      "[#{Color.default(menu_name)}] #{Color.prompt("» ")}",
-    ].join("\n")
-  end
-
-  def prompt_options
-    @prompt_options ||= {
-      Color.option("ctrl-d") => "back",
-      Color.option("ctrl-c") => "main menu",
-      Color.option("q") => "quit",
-    }.map { |opt, desc| "[#{opt}] #{desc}" }.join(" ")
-  end
-
   def menu_name
     self.class
       .to_s
@@ -89,14 +91,6 @@ class ApplicationMenu
       .downcase
       .chomp("_menu")
       .tr("_", " ")
-  end
-
-  def valid_message
-    "You selected: #{selection_label}"
-  end
-
-  def invalid_message
-    "Invalid selection: '#{input}'. Please try again."
   end
 
   def make_selection
