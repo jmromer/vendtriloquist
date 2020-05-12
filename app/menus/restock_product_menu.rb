@@ -7,7 +7,7 @@ require "utils/errors"
 class RestockProductMenu < ApplicationMenu
   alias product selection
 
-  def initialize(bin:, printer:, source: :restock_select_bin)
+  def initialize(bin:, printer:, source: :restock_menu)
     super(printer: printer, source: source)
     self.bin = bin
   end

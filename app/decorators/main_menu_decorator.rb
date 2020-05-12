@@ -5,8 +5,8 @@ require "decorators/application_decorator"
 class MainMenuDecorator < ApplicationDecorator
   def options
     @options ||= {
-      "1" => [:purchase, "Make a purchase"],
-      "2" => [:restock_select_bin, "Add inventory"],
+      "1" => [:purchase_menu, "Make a purchase"],
+      "2" => [:restock_menu, "Add inventory"],
     }.freeze
   end
 

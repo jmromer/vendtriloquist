@@ -6,14 +6,14 @@ require "menus/purchase_menu"
 require "menus/restock_bin_menu"
 
 module VendingMachine
-  def self.router(target = :main, **kwargs)
+  def self.router(target = :main_menu, **kwargs)
     DB.connect
     printer = kwargs.fetch(:printer)
 
     case target&.to_sym
-    when :purchase
+    when :purchase_menu
       PurchaseMenu.new(**kwargs).read
-    when :restock_select_bin
+    when :restock_menu
       RestockBinMenu.new(**kwargs).read
     else
       MainMenu.new(**kwargs).read
@@ -27,6 +27,6 @@ module VendingMachine
     router(e.to_s, **kwargs)
   rescue ReturnToMain => e
     printer.puts(e)
-    router(:main, **kwargs)
+    router(**kwargs)
   end
 end

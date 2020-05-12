@@ -4,7 +4,8 @@
 require "readline"
 
 class ApplicationMenu
-  def initialize(source: nil, printer:)
+  def initialize(source: nil, decorator: nil, printer:)
+    self.decorator = decorator
     self.out = printer
     self.source = source
     self.selected_option = []
@@ -38,6 +39,7 @@ class ApplicationMenu
   protected
 
   attr_accessor \
+    :decorator,
     :input,
     :result_message,
     :out,
@@ -46,16 +48,18 @@ class ApplicationMenu
     :decorator,
     :success_message
 
-  delegate :options,
-           :options_message,
-           :main_message,
-           :goodbye_message,
-           :valid_message,
-           :no_options_message,
-           :prompt,
-           :prompt_options,
-           :invalid_message,
-           to: :decorator
+  delegate \
+    :currency,
+    :goodbye_message,
+    :invalid_message,
+    :main_message,
+    :no_options_message,
+    :options,
+    :options_message,
+    :prompt,
+    :prompt_options,
+    :valid_message,
+    to: :decorator
 
   def process_input
     Readline::HISTORY.push(input)

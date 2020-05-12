@@ -9,19 +9,13 @@ require "utils/errors"
 class PaymentMenu < ApplicationMenu
   alias selected_payment selection
 
-  def initialize(purchase:, printer:, source: :purchase)
+  def initialize(purchase:, printer:, source: :purchase_menu)
     super(printer: printer, source: source)
-    purchase = PurchasePaymentDecorator.new(purchase)
-    self.payment = PaymentProcessor.new(purchase: purchase)
+    self.decorator = PurchasePaymentDecorator.new(purchase)
+    self.payment = PaymentProcessor.new(purchase: decorator)
   end
 
   protected
-
-  def decorator
-    PurchasePaymentDecorator.new
-  end
-
-  delegate :currency, to: :decorator
 
   attr_accessor :payment
 
