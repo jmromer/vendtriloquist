@@ -28,6 +28,10 @@ class Money < ApplicationRecord
             presence: true,
             numericality: { greater_than_or_equal_to: 0 }
 
+  def self.valid?(denomination)
+    VALID_DENOMINATIONS.include?(denomination)
+  end
+
   def self.till_values
     pluck(:denomination_value, :quantity).to_h
   end

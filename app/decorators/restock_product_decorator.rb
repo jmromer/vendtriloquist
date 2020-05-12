@@ -4,13 +4,9 @@ require "decorators/application_decorator"
 require "models/product"
 
 class RestockProductDecorator < ApplicationDecorator
+  alias selected_bin undecorated
+
   delegate :index, to: :selected_bin, prefix: true
-
-  attr_accessor :selected_bin
-
-  def initialize(selected_bin:)
-    self.selected_bin = selected_bin
-  end
 
   def options
     Product.all.map.with_index(1) do |product, number|

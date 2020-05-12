@@ -9,7 +9,7 @@ class RestockBinMenu < ApplicationMenu
 
   def initialize(printer:, source: :main_menu)
     super
-    self.decorator = RestockBinDecorator.new
+    self.decorator = RestockBinDecorator.decorate
   end
 
   protected

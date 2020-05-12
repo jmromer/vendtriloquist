@@ -9,7 +9,7 @@ FactoryBot.define do
 
   factory :product do
     sequence(:name) { |n| "Candy Bar #{n}" }
-    sequence(:price_atomic) do
+    sequence(:price_int) do
       [(1..5), [0, 25, 50]].map { |n| n.entries.sample }.join .to_i
     end
   end

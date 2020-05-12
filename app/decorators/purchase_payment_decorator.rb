@@ -15,11 +15,8 @@ class PurchasePaymentDecorator < ApplicationDecorator
     :product,
     to: :stocking
 
-  attr_accessor :money
-
-  def initialize(purchase:, money: nil)
-    super(purchase)
-    self.money = money || MoneyDecorator.new
+  def money
+    @money ||= MoneyDecorator.decorate
   end
 
   def options

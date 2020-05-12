@@ -2,7 +2,7 @@
 
 class PaymentProcessor
   def initialize(purchase:)
-    self.purchase = purchase
+    self.purchase = PurchasePaymentDecorator.decorate(purchase)
     self.amount_returned = 0
     self.available_change = {}
     self.denominations_received = []
@@ -12,16 +12,16 @@ class PaymentProcessor
   def process!(value:)
     denominations_received << value
 
+    raise PaymentInvalid, payment_failure_message unless Money.valid?(value)
+
     ActiveRecord::Base.transaction do
       render_change
       finalize!
     end
 
-    if paid_in_full?
-      success_message
-    else
-      raise BalanceRemaining, status_message
-    end
+    return success_message if paid_in_full?
+
+    raise BalanceRemaining, status_message
   rescue ActiveRecord::RecordInvalid
     raise PaymentFailure, payment_failure_message
   end
@@ -63,7 +63,7 @@ class PaymentProcessor
   end
 
   def amount_due
-    purchase.price_atomic
+    purchase.price_int
   end
 
   def amount_due?

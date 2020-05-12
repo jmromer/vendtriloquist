@@ -10,10 +10,18 @@ class ApplicationDecorator
   include Color
   include Currency
 
-  def self.decorate(object)
+  def self.decorate(object = nil)
+    return new unless object
+    return object if object.is_a?(self.class)
     return new(object) unless object.respond_to?(:map)
 
     object.map { |obj| new(obj) }
+  end
+
+  attr_accessor :undecorated
+
+  def initialize(undecorated = nil)
+    self.undecorated = undecorated
   end
 
   def options(object)
@@ -22,12 +30,6 @@ class ApplicationDecorator
       .map
       .with_index(1) { |obj, index| obj.options_hash_entry(index) }
       .to_h
-  end
-
-  attr_accessor :undecorated
-
-  def initialize(undecorated = nil)
-    self.undecorated = undecorated
   end
 
   def main_message(result_message=nil)

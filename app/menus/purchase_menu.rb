@@ -9,7 +9,7 @@ class PurchaseMenu < ApplicationMenu
 
   def initialize(printer:, source: :main_menu)
     super
-    self.decorator = PurchaseBinDecorator.new
+    self.decorator = PurchaseBinDecorator.decorate
   end
 
   protected

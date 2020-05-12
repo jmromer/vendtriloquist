@@ -11,7 +11,7 @@ class PaymentMenu < ApplicationMenu
 
   def initialize(purchase:, printer:, source: :purchase_menu)
     super(printer: printer, source: source)
-    self.decorator = PurchasePaymentDecorator.new(purchase: purchase)
+    self.decorator = PurchasePaymentDecorator.new(purchase)
     self.payment = PaymentProcessor.new(purchase: decorator)
   end
 
@@ -32,9 +32,9 @@ class PaymentMenu < ApplicationMenu
     self.result_message = payment.process!(value: payment_value)
     raise ReturnToMain, result_message
   rescue InsufficientChange, PaymentFailure => e
-    raise ReturnToMain, e.to_s
+    raise ReturnToMain, e.message
   rescue BalanceRemaining => e
-    self.result_message = e.to_s
+    self.result_message = e.message
     nil
   end
 end

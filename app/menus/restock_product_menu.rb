@@ -9,7 +9,7 @@ class RestockProductMenu < ApplicationMenu
 
   def initialize(bin:, printer:, source: :restock_menu)
     super(printer: printer, source: source)
-    self.decorator = RestockProductDecorator.new(selected_bin: bin)
+    self.decorator = RestockProductDecorator.decorate(bin)
     self.selected_bin = bin
   end
 

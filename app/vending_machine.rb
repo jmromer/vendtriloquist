@@ -20,11 +20,11 @@ module VendingMachine
     end
   rescue Back => e
     kwargs.delete(:source)
-    router(e.to_s, **kwargs)
+    router(e.message, **kwargs)
   rescue Route => e
-    router(e.to_s, **kwargs)
+    router(e.message, **kwargs)
   rescue Interrupt => e
-    router(e.to_s, **kwargs)
+    router(e.message, **kwargs)
   rescue ReturnToMain => e
     printer.puts(e)
     router(**kwargs)

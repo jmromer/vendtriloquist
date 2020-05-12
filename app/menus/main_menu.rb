@@ -7,7 +7,7 @@ require "utils/errors"
 class MainMenu < ApplicationMenu
   def initialize(source: nil, printer:)
     super
-    self.decorator = MainMenuDecorator.new
+    self.decorator = MainMenuDecorator.decorate
   end
 
   protected
