@@ -19,15 +19,9 @@ class ApplicationMenu
       self.input = Readline.readline(prompt(menu_name))&.strip
 
       case input&.downcase
-      when nil
-        out.puts
-        raise Back, source
-      when "q"
-        out.puts goodbye_message
-        raise Quit
-      else
-        Readline::HISTORY.push(input)
-        self.selected_option = make_selection
+      when nil then go_back
+      when "q" then quit
+      else process_input
       end
 
       if selection
@@ -62,6 +56,21 @@ class ApplicationMenu
            :prompt_options,
            :invalid_message,
            to: :decorator
+
+  def process_input
+    Readline::HISTORY.push(input)
+    self.selected_option = make_selection
+  end
+
+  def go_back
+    out.puts
+    raise Back, source
+  end
+
+  def quit
+    out.puts goodbye_message
+    raise Quit
+  end
 
   def selection
     selected_option&.first

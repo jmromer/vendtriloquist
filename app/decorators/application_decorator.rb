@@ -40,7 +40,7 @@ class ApplicationDecorator
     color.default "You selected: #{selection}"
   end
 
-  def invalid_message
+  def invalid_message(input)
     color.error "Invalid selection: '#{input}'. Please try again."
   end
 
