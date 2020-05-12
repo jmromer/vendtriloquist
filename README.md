@@ -55,7 +55,7 @@ Dependency Graph
 
 [[interactive][dep-graph]]
 
-[dep-gif]: docs/dependency-graph.gif
+[dep-gif]: docs/dependency-graph-1.gif
 [dep-graph]: https://jakeromer.com/vendtriloquist/index.html
 [ascii]: https://asciinema.org/a/zRX0a6GfAZjaHGBebcRqEZ6uz.svg
 [ascii-link]: https://asciinema.org/a/zRX0a6GfAZjaHGBebcRqEZ6uz
