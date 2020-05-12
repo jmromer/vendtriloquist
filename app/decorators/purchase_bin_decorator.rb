@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "decorators/application_decorator"
 require "decorators/bin_decorator"
 require "models/bin"
 
@@ -23,7 +24,7 @@ class PurchaseBinDecorator < BinDecorator
     [
       color.warning("Select a product:"),
       "",
-      bin_rows.join
+      bin_rows.join,
     ].join("\n")
   end
 end

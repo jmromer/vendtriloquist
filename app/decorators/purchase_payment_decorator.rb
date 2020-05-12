@@ -1,21 +1,29 @@
 # coding: utf-8
 # frozen_string_literal: true
 
+require "decorators/application_decorator"
 require "decorators/money_decorator"
 require "models/money"
 require "utils/currency"
 
 class PurchasePaymentDecorator < ApplicationDecorator
-  delegate :price_atomic, to: :obj
-  delegate :product, to: :obj
-  delegate :destroy!, to: :obj
+  alias stocking undecorated
 
-  def decorator
-    MoneyDecorator.new
+  delegate \
+    :destroy!,
+    :price_atomic,
+    :product,
+    to: :stocking
+
+  attr_accessor :money
+
+  def initialize(purchase:, money: nil)
+    super(purchase)
+    self.money = money || MoneyDecorator.new
   end
 
   def options
-    decorator.denomination_options
+    money.denomination_options
   end
 
   def options_message
@@ -66,7 +74,7 @@ class PurchasePaymentDecorator < ApplicationDecorator
 
   def change_insufficient_message(amount_refunded)
     till =
-      decorator
+      money
         .till_localized
         .select { |_amt, qty| qty.positive? }
         .map { |e| e.join(": ") }

@@ -1,9 +1,9 @@
 # coding: utf-8
 # frozen_string_literal: true
 
-require "utils/localization"
 require "utils/color"
 require "utils/currency"
+require "utils/localization"
 
 class ApplicationDecorator
   include Localization
@@ -24,10 +24,10 @@ class ApplicationDecorator
       .to_h
   end
 
-  attr_accessor :obj
+  attr_accessor :undecorated
 
-  def initialize(obj = nil)
-    self.obj = obj
+  def initialize(undecorated = nil)
+    self.undecorated = undecorated
   end
 
   def main_message(result_message=nil)

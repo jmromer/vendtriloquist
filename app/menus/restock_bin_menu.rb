@@ -24,7 +24,7 @@ class RestockBinMenu < ApplicationMenu
 
   def dispatch
     RestockProductMenu.new(
-      bin: selected_bin.obj,
+      bin: selected_bin.undecorated,
       printer: out,
     ).read
   end

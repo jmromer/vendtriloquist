@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "decorators/application_decorator"
+require "models/money"
+
 class MoneyDecorator < ApplicationDecorator
   def denomination_options
     Money::VALID_DENOMINATIONS

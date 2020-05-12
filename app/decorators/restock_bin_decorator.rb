@@ -3,10 +3,12 @@
 require "decorators/bin_decorator"
 
 class RestockBinDecorator < BinDecorator
+  alias bin undecorated
+
   delegate \
     :capacity,
     :in_stock_count,
-    to: :obj
+    to: :bin
 
   def options
     self.class

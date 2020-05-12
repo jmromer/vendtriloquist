@@ -18,7 +18,7 @@ class MainMenuDecorator < ApplicationDecorator
     ].join("\n")
   end
 
-  def options_entry(k, v)
-    "(#{color.option(k)}) #{v}"
+  def options_entry(trigger, label)
+    "(#{color.option(trigger)}) #{label}"
   end
 end

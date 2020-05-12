@@ -11,7 +11,7 @@ class PaymentMenu < ApplicationMenu
 
   def initialize(purchase:, printer:, source: :purchase_menu)
     super(printer: printer, source: source)
-    self.decorator = PurchasePaymentDecorator.new(purchase)
+    self.decorator = PurchasePaymentDecorator.new(purchase: purchase)
     self.payment = PaymentProcessor.new(purchase: decorator)
   end
 

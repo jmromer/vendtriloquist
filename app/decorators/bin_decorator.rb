@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 require "decorators/application_decorator"
+require "models/bin"
 
 class BinDecorator < ApplicationDecorator
-  delegate :next_product, to: :obj
-  delegate :empty?, to: :obj
-  delegate :index, to: :obj
-  delegate :price, to: :obj
-  delegate :next_in_stock, to: :obj
+  alias bin undecorated
+
+  delegate \
+    :empty?,
+    :index,
+    :next_in_stock,
+    :next_product,
+    :price,
+    to: :bin
 
   def product_name
     next_product&.name || "[sold out]"
