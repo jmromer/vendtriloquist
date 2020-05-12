@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+app = File.join(File.dirname(__dir__), "app")
+$LOAD_PATH.unshift(File.expand_path(app))
+
+require "pry"
+require "cli"
+
+if $PROGRAM_NAME == __FILE__
+  CLI.start
+end

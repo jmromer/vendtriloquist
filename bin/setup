@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+set -e
+
+#
+# Install project dependencies
+#
+# Usage:
+#
+#   bin/setup [OPTIONS]
+#
+# Available options:
+#
+#  --silent  Run without verbose output
+#
+
+VERBOSE=1
+
+usage() {
+    grep '^#' < "$0" | tail -n +2 | cut -c 3-
+}
+
+notice() {
+    [[ -z "$VERBOSE" ]] && return
+    echo "$1"
+}
+
+cmd_missing() {
+    ! command -v "$1" >/dev/null
+}
+
+check_path() {
+    [[ -f bin/setup ]] && return
+    echo "Error: Please run bin/setup from the project root."
+    exit 1
+}
+
+check_deps() {
+    if cmd_missing ruby; then
+        echo "Error: Missing dependencies."
+        echo "Please ensure Ruby $(cat .ruby-version) is installed."
+        exit 1
+    fi
+
+    if cmd_missing bundle; then
+        notice "Bundler not found. Installing now..."
+        gem install bundler >/dev/null
+    fi
+}
+
+install_deps() {
+    notice "Installing dependencies..."
+    bundle install
+}
+
+create_database() {
+    notice "Creating the database..."
+    bundle exec rake db:reset
+}
+
+ready_notice() {
+    notice "Dependencies installed."
+    notice "Run the app with:"
+    notice "bin/start"
+}
+
+
+while [ $# -gt -1 ]; do
+    case "$1" in
+        "-h"|"--help"|"help")
+            usage | $PAGER
+            exit 2
+            ;;
+        "--silent")
+            unset VERBOSE
+            shift
+            ;;
+        "")
+            check_path
+            check_deps
+            install_deps
+            create_database
+            ready_notice
+            exit 0
+            ;;
+        *)
+            (>&2 echo "Unrecognized option: $1")
+            exit 1
+            ;;
+    esac
+done

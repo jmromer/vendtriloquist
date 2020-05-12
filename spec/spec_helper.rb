@@ -14,7 +14,9 @@ require "shoulda-matchers"
 require "db"
 require "vending_machine"
 
-DB.connect
+DB.drop(environment: :test) if ENV.key?("DB_TEST_RESET")
+DB.connect(environment: :test)
+DB.migrate
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

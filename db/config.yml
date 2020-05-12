@@ -1,0 +1,11 @@
+development:
+  adapter: sqlite3
+  database: db/vending_machine_devlopment.sqlite3
+  pool: 5
+  timeout: 5000
+
+test:
+  adapter: sqlite3
+  database: db/vending_machine_test.sqlite3
+  pool: 5
+  timeout: 5000
