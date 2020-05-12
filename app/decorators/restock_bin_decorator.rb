@@ -9,7 +9,10 @@ class RestockBinDecorator < BinDecorator
     to: :obj
 
   def options
-    super(Bin.below_capacity)
+    self.class
+      .decorate(Bin.below_capacity)
+      .map(&:options_hash_entry)
+      .to_h
   end
 
   def options_message

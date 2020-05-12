@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "decorators/product_decorator"
+require "decorators/application_decorator"
 require "models/product"
 
-class RestockProductDecorator < ProductDecorator
+class RestockProductDecorator < ApplicationDecorator
   delegate :name, to: :obj
 
   def options

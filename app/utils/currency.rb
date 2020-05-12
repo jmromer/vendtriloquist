@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Currency
+  def currency
+    Currency
+  end
+
   def self.to_int(amt)
     case amt
     when Integer

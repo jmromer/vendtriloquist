@@ -3,6 +3,10 @@
 require "colorize"
 
 module Color
+  def color
+    Color
+  end
+
   class << self
     def default(value, disabled = false)
       return disabled(value) if disabled

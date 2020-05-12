@@ -3,16 +3,12 @@
 
 require "utils/localization"
 require "utils/color"
+require "utils/currency"
 
 class ApplicationDecorator
   include Localization
-  extend Localization
-
-  attr_accessor :obj
-
-  def initialize(obj = nil)
-    self.obj = obj
-  end
+  include Color
+  include Currency
 
   def self.decorate(object)
     return new(object) unless object.respond_to?(:map)
@@ -21,23 +17,17 @@ class ApplicationDecorator
   end
 
   def options(object)
-    self.class.decorate(object).map(&:options_hash_entry).to_h
+    self.class
+      .decorate(object)
+      .map
+      .with_index(1) { |obj, index| obj.options_hash_entry(index) }
+      .to_h
   end
 
-  def self.color
-    Color
-  end
+  attr_accessor :obj
 
-  def color
-    self.class.color
-  end
-
-  def self.currency
-    Currency
-  end
-
-  def currency
-    self.class.currency
+  def initialize(obj = nil)
+    self.obj = obj
   end
 
   def main_message(result_message=nil)
@@ -47,13 +37,11 @@ class ApplicationDecorator
   end
 
   def valid_message(selection)
-    color.default \
-      "You selected: #{selection}"
+    color.default "You selected: #{selection}"
   end
 
   def invalid_message
-    color.error \
-      "Invalid selection: '#{input}'. Please try again."
+    color.error "Invalid selection: '#{input}'. Please try again."
   end
 
   def goodbye_message

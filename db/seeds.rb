@@ -37,7 +37,7 @@ Money::VALID_DENOMINATIONS.each do |denomination|
   Money.create!(denomination_value: denomination, quantity: 2)
 end
 
-till = MoneyDecorator.till_localized.map { |e| e.join(": ") }
+till = MoneyDecorator.new.till_localized.map { |e| e.join(": ") }
 logger.info "Till: #{till.join(", ")}"
 
 logger.info "Seeding complete."

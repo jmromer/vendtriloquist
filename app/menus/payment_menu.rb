@@ -21,6 +21,8 @@ class PaymentMenu < ApplicationMenu
     PurchasePaymentDecorator.new
   end
 
+  delegate :currency, to: :decorator
+
   attr_accessor :payment
 
   def make_selection
@@ -28,7 +30,8 @@ class PaymentMenu < ApplicationMenu
   end
 
   def dispatch
-    self.result_message = payment.process!(face_value: selected_payment)
+    payment_value = currency.to_int(selected_payment)
+    self.result_message = payment.process!(value: payment_value)
     raise ReturnToMainMenu, result_message
   rescue InsufficientChange, PaymentFailure => e
     raise ReturnToMainMenu, e.to_s

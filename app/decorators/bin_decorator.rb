@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "decorators/application_decorator"
-require "decorators/product_decorator"
 
 class BinDecorator < ApplicationDecorator
   delegate :next_product, to: :obj

@@ -25,7 +25,7 @@ class PurchaseMenu < ApplicationMenu
     else
       PaymentMenu.new(
         purchase: selected_bin.next_in_stock,
-        printer: out
+        printer: out,
       ).read
     end
   end

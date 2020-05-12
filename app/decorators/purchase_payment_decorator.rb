@@ -10,8 +10,12 @@ class PurchasePaymentDecorator < ApplicationDecorator
   delegate :product, to: :obj
   delegate :destroy!, to: :obj
 
+  def decorator
+    MoneyDecorator.new
+  end
+
   def options
-    MoneyDecorator.denomination_options
+    decorator.denomination_options
   end
 
   def options_message
@@ -62,7 +66,7 @@ class PurchasePaymentDecorator < ApplicationDecorator
 
   def change_insufficient_message(amount_refunded)
     till =
-      MoneyDecorator
+      decorator
         .till_localized
         .select { |_amt, qty| qty.positive? }
         .map { |e| e.join(": ") }
