@@ -6,11 +6,11 @@ require "models/product"
 class RestockProductDecorator < ProductDecorator
   delegate :name, to: :obj
 
-  def self.options
+  def options
     super(Product.all)
   end
 
-  def self.options_message
+  def options_message
     [
       "Product to fill:",
       "",
@@ -25,5 +25,12 @@ class RestockProductDecorator < ProductDecorator
       "(#{color.option(index)}) #{color.default(name)}"
      ]
     ]
+  end
+
+  def success_message(bin_index, product_name)
+    <<~STR
+      Filling bin #{bin_index} with #{product_name}...
+      #{color.success("Bin #{bin_index} is filled.")}
+    STR
   end
 end

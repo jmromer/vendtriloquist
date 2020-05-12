@@ -12,7 +12,7 @@ class MainMenu < ApplicationMenu
            to: :decorator
 
   def decorator
-    @decorator ||= MainMenuDecorator.new
+    MainMenuDecorator.new
   end
 
   def make_selection

@@ -9,12 +9,8 @@ class PurchaseMenu < ApplicationMenu
 
   protected
 
-  def options
-    PurchaseBinDecorator.options
-  end
-
-  def options_message
-    PurchaseBinDecorator.options_message
+  def decorator
+    PurchaseBinDecorator.new
   end
 
   def make_selection
@@ -24,8 +20,7 @@ class PurchaseMenu < ApplicationMenu
 
   def dispatch
     if selected_bin.sold_out?
-      self.result_message =
-        color.warning("Sold out. Please try another item.")
+      self.result_message = "Sold out. Please try another item."
       nil
     else
       PaymentMenu.new(

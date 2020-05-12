@@ -7,15 +7,11 @@ require "menus/restock_product_menu"
 class RestockBinMenu < ApplicationMenu
   alias bin selection
 
+  def decorator
+    RestockBinDecorator.new
+  end
+
   protected
-
-  def options
-    RestockBinDecorator.options
-  end
-
-  def options_message
-    RestockBinDecorator.options_message
-  end
 
   def menu_name
     "restock: select a bin"

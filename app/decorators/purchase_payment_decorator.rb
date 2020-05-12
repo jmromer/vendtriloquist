@@ -10,11 +10,11 @@ class PurchasePaymentDecorator < ApplicationDecorator
   delegate :product, to: :obj
   delegate :destroy!, to: :obj
 
-  def self.options
+  def options
     MoneyDecorator.denomination_options
   end
 
-  def self.options_message
+  def options_message
     <<~STR
       #{color.warning("Insert currency")}
 

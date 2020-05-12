@@ -16,12 +16,8 @@ class RestockProductMenu < ApplicationMenu
 
   attr_accessor :bin
 
-  def options
-    RestockProductDecorator.options
-  end
-
-  def options_message
-    RestockProductDecorator.options_message
+  def decorator
+    RestockProductDecorator.new
   end
 
   def menu_name
@@ -34,11 +30,6 @@ class RestockProductMenu < ApplicationMenu
 
   def dispatch
     bin.fill(product: product.obj)
-
-    # TODO: copy to a decorator
-    raise ReturnToMainMenu, <<~STR
-      Filling bin #{bin} with #{product.name}...
-      #{color.success("Bin #{bin} is filled.")}
-    STR
+    raise ReturnToMainMenu, decorator.success_message(bin.index, product.name)
   end
 end

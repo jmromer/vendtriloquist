@@ -11,21 +11,17 @@ class PaymentMenu < ApplicationMenu
 
   def initialize(purchase:, printer:, source: :purchase)
     super(printer: printer, source: source)
-    purchase = PurchasePaymentDecorator.decorate(purchase)
+    purchase = PurchasePaymentDecorator.new(purchase)
     self.payment = PaymentProcessor.new(purchase: purchase)
   end
 
   protected
 
+  def decorator
+    PurchasePaymentDecorator.new
+  end
+
   attr_accessor :payment
-
-  def options
-    PurchasePaymentDecorator.options
-  end
-
-  def options_message
-    PurchasePaymentDecorator.options_message
-  end
 
   def make_selection
     options[input]

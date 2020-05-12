@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require "readline"
-require "utils/color"
 
 class ApplicationMenu
   def initialize(source: nil, printer:)
@@ -12,30 +11,22 @@ class ApplicationMenu
     self.input = nil
   end
 
-  def self.color
-    Color
-  end
-
-  def color
-    self.class.color
-  end
-
   def read
     loop do
       if options&.empty?
-        out.puts color.error("None available.")
+        out.puts no_options_message
         break
       end
 
-      out.puts main_message
-      self.input = Readline.readline(prompt)&.strip
+      out.puts main_message(result_message)
+      self.input = Readline.readline(prompt(menu_name))&.strip
 
       case input&.downcase
       when nil
         out.puts
         raise Back, source
       when "q"
-        out.puts Color.success "Thanks, bye!"
+        out.puts goodbye_message
         raise Quit
       else
         Readline::HISTORY.push(input)
@@ -43,11 +34,11 @@ class ApplicationMenu
       end
 
       if selection
-        out.puts(color.default(valid_message))
+        out.puts(valid_message(selection_label))
         unwind = dispatch
         break if unwind
       else
-        out.puts(color.error(invalid_message))
+        out.puts(invalid_message(input))
         next
       end
     end
@@ -61,13 +52,19 @@ class ApplicationMenu
     :out,
     :selected_option,
     :source,
+    :decorator,
     :success_message
 
-  def main_message
-    [result_message, options_message]
-      .compact
-      .join("\n\n")
-  end
+  delegate :options,
+           :options_message,
+           :main_message,
+           :goodbye_message,
+           :valid_message,
+           :no_options_message,
+           :prompt,
+           :prompt_options,
+           :invalid_message,
+           to: :decorator
 
   def selection
     selected_option&.first
@@ -77,21 +74,6 @@ class ApplicationMenu
     selected_option&.last
   end
 
-  def prompt
-    [
-      prompt_options,
-      "[#{color.default(menu_name)}] #{color.prompt("» ")}",
-    ].join("\n")
-  end
-
-  def prompt_options
-    @prompt_options ||= {
-      color.option("ctrl-d") => "back",
-      color.option("ctrl-c") => "main menu",
-      color.option("q") => "quit",
-    }.map { |opt, desc| "[#{opt}] #{desc}" }.join(" ")
-  end
-
   def menu_name
     self.class
       .to_s
@@ -99,14 +81,6 @@ class ApplicationMenu
       .downcase
       .chomp("_menu")
       .tr("_", " ")
-  end
-
-  def valid_message
-    "You selected: #{selection_label}"
-  end
-
-  def invalid_message
-    "Invalid selection: '#{input}'. Please try again."
   end
 
   def make_selection

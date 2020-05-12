@@ -4,15 +4,15 @@ require "decorators/bin_decorator"
 
 class RestockBinDecorator < BinDecorator
   delegate \
-  :in_stock_count,
-  :capacity,
-  to: :obj
+    :capacity,
+    :in_stock_count,
+    to: :obj
 
-  def self.options
+  def options
     super(Bin.below_capacity)
   end
 
-  def self.options_message
+  def options_message
     [
       "Select a bin to refill:",
       "",
