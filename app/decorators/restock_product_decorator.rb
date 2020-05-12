@@ -42,6 +42,6 @@ class RestockProductDecorator < ApplicationDecorator
   end
 
   def failure_message
-    color.error("Sorry, bin #{selected_bin_index} could not be filled.")
+    color.error "Sorry, bin #{selected_bin_index} could not be filled."
   end
 end

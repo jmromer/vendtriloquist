@@ -51,7 +51,7 @@ class ApplicationDecorator
   end
 
   def no_options_message
-    color.error("None available.")
+    color.error "None available."
   end
 
   def prompt(menu_name)
