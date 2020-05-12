@@ -4,13 +4,13 @@ class CreateTables < ActiveRecord::Migration[5.0]
   def change
     create_table :products do |t|
       t.string :name, null: false
-      t.integer :price_atomic, null: false
+      t.integer :price_int, null: false
       t.integer :in_stock_count, default: 0, null: false
 
       t.timestamps null: false
     end
 
-    add_index :products, [:name, :price_atomic], unique: true
+    add_index :products, [:name, :price_int], unique: true
 
     create_table :bins do |t|
       t.string :row, null: false

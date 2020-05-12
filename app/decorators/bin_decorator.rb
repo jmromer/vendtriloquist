@@ -21,7 +21,7 @@ class BinDecorator < ApplicationDecorator
   def product_price
     return unless next_product
 
-    l currency.to_dec(next_product.price_atomic)
+    l currency.to_dec(next_product.price_int)
   end
 
   def sold_out?

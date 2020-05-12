@@ -9,7 +9,7 @@ class Product < ApplicationRecord
   validates :name,
             presence: true
 
-  validates :price_atomic,
+  validates :price_int,
             presence: true,
             numericality: { greater_than: 0 },
             uniqueness: { scope: :name }

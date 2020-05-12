@@ -9,6 +9,6 @@ class Stocking < ApplicationRecord
 
   validates :bin, :product, presence: true
 
-  delegate :price_atomic, to: :product
+  delegate :price_int, to: :product
   delegate :index, to: :bin, prefix: true
 end

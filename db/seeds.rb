@@ -12,7 +12,7 @@ logger.info "Seeding products..."
   ["Dream Bar", 1.25],
 ].each do |name, price|
   logger.info "product: #{name}: #{price}"
-  Product.create!(name: name, price_atomic: price * 100)
+  Product.create!(name: name, price_int: price * 100)
 end
 
 logger.info "Seeding bins..."

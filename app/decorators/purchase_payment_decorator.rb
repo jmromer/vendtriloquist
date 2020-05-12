@@ -11,7 +11,7 @@ class PurchasePaymentDecorator < ApplicationDecorator
 
   delegate \
     :destroy!,
-    :price_atomic,
+    :price_int,
     :product,
     to: :stocking
 
@@ -35,7 +35,7 @@ class PurchasePaymentDecorator < ApplicationDecorator
   end
 
   def price
-    currency.to_dec price_atomic
+    currency.to_dec price_int
   end
 
   def change_rendered_message(change_rendered)
