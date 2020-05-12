@@ -3,14 +3,14 @@
 require "decorators/application_decorator"
 
 class MainMenuDecorator < ApplicationDecorator
-  def self.options
+  def options
     @options ||= {
       "1" => [:purchase, "Make a purchase"],
       "2" => [:restock_select_bin, "Add inventory"],
     }.freeze
   end
 
-  def self.options_message
+  def options_message
     [
       color.warning("Main menu"),
       "",
@@ -18,7 +18,7 @@ class MainMenuDecorator < ApplicationDecorator
     ].join("\n")
   end
 
-  def self.options_entry(k, v)
+  def options_entry(k, v)
     "(#{color.option(k)}) #{v}"
   end
 end

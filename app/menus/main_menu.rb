@@ -7,12 +7,12 @@ require "utils/errors"
 class MainMenu < ApplicationMenu
   protected
 
-  def options
-    MainMenuDecorator.options
-  end
+  delegate :options,
+           :options_message,
+           to: :decorator
 
-  def options_message
-    MainMenuDecorator.options_message
+  def decorator
+    @decorator ||= MainMenuDecorator.new
   end
 
   def make_selection

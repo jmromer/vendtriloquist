@@ -8,7 +8,7 @@ class ApplicationDecorator
 
   attr_accessor :obj
 
-  def initialize(obj)
+  def initialize(obj=nil)
     self.obj = obj
   end
 
@@ -37,6 +37,4 @@ class ApplicationDecorator
   def currency
     self.class.currency
   end
-
-  private_class_method :new
 end
