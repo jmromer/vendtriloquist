@@ -136,3 +136,5 @@ tags
 .vim
 
 # End of https://www.gitignore.io/api/ruby,emacs,vim
+logs/audit.log
+logs/ui.log
