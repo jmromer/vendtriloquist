@@ -21,7 +21,7 @@ class PurchaseBinDecorator < BinDecorator
     end
 
     [
-      Color.warning("Select a product:"),
+      color.warning("Select a product:"),
       "",
       bin_rows.join
     ].join("\n")

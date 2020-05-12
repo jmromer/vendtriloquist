@@ -2,6 +2,7 @@
 
 require "decorators/main_menu_decorator"
 require "menus/application_menu"
+require "utils/errors"
 
 class MainMenu < ApplicationMenu
   protected
@@ -19,6 +20,6 @@ class MainMenu < ApplicationMenu
   end
 
   def dispatch
-    VendingMachine.public_send(selection)
+    raise Dispatch, selection
   end
 end

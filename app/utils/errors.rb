@@ -5,6 +5,8 @@ class VendingMachineException < StandardError; end
 class MenuException < VendingMachineException; end
 class ReturnToMainMenu < MenuException; end
 class Quit < MenuException; end
+class Dispatch < MenuException; end
+class Back < MenuException; end
 
 class PaymentException < VendingMachineException; end
 class BalanceRemaining < PaymentException; end

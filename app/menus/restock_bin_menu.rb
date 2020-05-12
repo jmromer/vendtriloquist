@@ -2,6 +2,7 @@
 
 require "decorators/restock_bin_decorator"
 require "menus/application_menu"
+require "menus/restock_product_menu"
 
 class RestockBinMenu < ApplicationMenu
   alias bin selection
@@ -25,6 +26,6 @@ class RestockBinMenu < ApplicationMenu
   end
 
   def dispatch
-    VendingMachine.restock_product(bin: bin)
+    RestockProductMenu.new(bin: bin.obj, printer: out).read
   end
 end

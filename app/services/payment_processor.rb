@@ -10,7 +10,7 @@ class PaymentProcessor
   end
 
   def process!(face_value:)
-    denominations_received << Currency.to_int(face_value)
+    denominations_received << MoneyDecorator.currency.to_int(face_value)
 
     ActiveRecord::Base.transaction do
       render_change

@@ -8,5 +8,5 @@ require "pry"
 require "cli"
 
 if $PROGRAM_NAME == __FILE__
-  CLI.start
+  CLI.new.start
 end

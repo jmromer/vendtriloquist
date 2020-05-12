@@ -6,20 +6,24 @@ require "models/money"
 require "utils/currency"
 
 class PurchasePaymentDecorator < ApplicationDecorator
+  delegate :price_atomic, to: :obj
+  delegate :product, to: :obj
+  delegate :destroy!, to: :obj
+
   def self.options
     MoneyDecorator.denomination_options
   end
 
   def self.options_message
     <<~STR
-      #{Color.warning("Insert currency")}
+      #{color.warning("Insert currency")}
 
       #{options.values.map(&:last).join(" ")}
     STR
   end
 
   def price
-    Currency.to_dec price_atomic
+    currency.to_dec price_atomic
   end
 
   def change_rendered_message(change_rendered)
@@ -27,7 +31,7 @@ class PurchasePaymentDecorator < ApplicationDecorator
 
     change =
       change_rendered
-        .map { |value| l(Currency.to_dec(value)) }
+        .map { |value| l(currency.to_dec(value)) }
 
     "Change rendered: #{change.join(", ")}"
   end
@@ -37,22 +41,22 @@ class PurchasePaymentDecorator < ApplicationDecorator
   end
 
   def amount_received_message(amount_received)
-    total = l(Currency.to_dec(amount_received))
+    total = l(currency.to_dec(amount_received))
     "Amount received: #{total}"
   end
 
   def balance_remaining_message(balance_remaining)
     [
       "Vending #{product.name} #{l price}...",
-      "Balance remaining: #{Color.warning l Currency.to_dec balance_remaining}",
+      "Balance remaining: #{color.warning l currency.to_dec balance_remaining}",
     ].join("\n")
   end
 
   def payment_failure_message(amount_refunded)
-    Color.error(<<~STR)
+    color.error(<<~STR)
       Could not process your payment.
 
-      Refunded: #{l Currency.to_dec amount_refunded}
+      Refunded: #{l currency.to_dec amount_refunded}
     STR
   end
 
@@ -64,16 +68,16 @@ class PurchasePaymentDecorator < ApplicationDecorator
         .map { |e| e.join(": ") }
         .join(", ")
 
-    Color.error(<<~STR)
+    color.error(<<~STR)
       Insufficient change available. Purchase canceled.
       In the till currently: #{till.empty? ? "[empty]" : till}
-      Refunded: #{l Currency.to_dec amount_refunded}
+      Refunded: #{l currency.to_dec amount_refunded}
     STR
   end
 
   def success_message(amount_received, change_rendered)
     [
-      Color.success("Thanks!"),
+      color.success("Thanks!"),
       purchase_price_message,
       amount_received_message(amount_received),
       change_rendered_message(change_rendered),

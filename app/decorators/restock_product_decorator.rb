@@ -4,6 +4,8 @@ require "decorators/product_decorator"
 require "models/product"
 
 class RestockProductDecorator < ProductDecorator
+  delegate :name, to: :obj
+
   def self.options
     super(Product.all)
   end
@@ -20,7 +22,7 @@ class RestockProductDecorator < ProductDecorator
     [
       index.to_s,
      [self,
-      "(#{Color.option(index)}) #{Color.default(name)}"
+      "(#{color.option(index)}) #{color.default(name)}"
      ]
     ]
   end

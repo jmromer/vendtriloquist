@@ -4,16 +4,20 @@ require "decorators/application_decorator"
 require "decorators/product_decorator"
 
 class BinDecorator < ApplicationDecorator
-  def next_product
-    undecorated.next_product&.decorated
-  end
+  delegate :next_product, to: :obj
+  delegate :empty?, to: :obj
+  delegate :index, to: :obj
+  delegate :price, to: :obj
+  delegate :next_in_stock, to: :obj
 
   def product_name
     next_product&.name || "[sold out]"
   end
 
   def product_price
-    next_product&.price
+    return unless next_product
+
+    l currency.to_dec(next_product.price_atomic)
   end
 
   def sold_out?
@@ -21,7 +25,7 @@ class BinDecorator < ApplicationDecorator
   end
 
   def display_index
-    Color.option(index, sold_out?).ljust(10)
+    color.option(index, sold_out?).ljust(10)
   end
 
   def display_price
@@ -29,7 +33,7 @@ class BinDecorator < ApplicationDecorator
   end
 
   def display_name
-    Color.default(product_name, sold_out?).ljust(27)
+    color.default(product_name, sold_out?).ljust(27)
   end
 
   def display_label

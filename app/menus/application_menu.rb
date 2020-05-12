@@ -5,28 +5,37 @@ require "readline"
 require "utils/color"
 
 class ApplicationMenu
-  def initialize
-    self.result_message = result_message
-    self.out = VendingMachine.out
+  def initialize(source: nil, printer:)
+    self.out = printer
+    self.source = source
     self.selected_option = []
     self.input = nil
+  end
+
+  def self.color
+    Color
+  end
+
+  def color
+    self.class.color
   end
 
   def read
     loop do
       if options&.empty?
-        out.puts Color.error("None available.")
+        out.puts color.error("None available.")
         break
       end
 
       out.puts main_message
       self.input = Readline.readline(prompt)&.strip
 
-      case input
+      case input&.downcase
       when nil
         out.puts
-        break
-      when "q", "Q"
+        raise Back, source
+      when "q"
+        out.puts Color.success "Thanks, bye!"
         raise Quit
       else
         Readline::HISTORY.push(input)
@@ -34,11 +43,11 @@ class ApplicationMenu
       end
 
       if selection
-        out.puts(Color.default(valid_message))
+        out.puts(color.default(valid_message))
         unwind = dispatch
         break if unwind
       else
-        out.puts(Color.error(invalid_message))
+        out.puts(color.error(invalid_message))
         next
       end
     end
@@ -51,6 +60,7 @@ class ApplicationMenu
     :result_message,
     :out,
     :selected_option,
+    :source,
     :success_message
 
   def main_message
@@ -70,15 +80,15 @@ class ApplicationMenu
   def prompt
     [
       prompt_options,
-      "[#{Color.default(menu_name)}] #{Color.prompt("» ")}",
+      "[#{color.default(menu_name)}] #{color.prompt("» ")}",
     ].join("\n")
   end
 
   def prompt_options
     @prompt_options ||= {
-      Color.option("ctrl-d") => "back",
-      Color.option("ctrl-c") => "main menu",
-      Color.option("q") => "quit",
+      color.option("ctrl-d") => "back",
+      color.option("ctrl-c") => "main menu",
+      color.option("q") => "quit",
     }.map { |opt, desc| "[#{opt}] #{desc}" }.join(" ")
   end
 

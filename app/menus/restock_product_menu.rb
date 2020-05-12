@@ -7,9 +7,9 @@ require "utils/errors"
 class RestockProductMenu < ApplicationMenu
   alias product selection
 
-  def initialize(bin:)
-    super()
-    self.bin = bin.decorated
+  def initialize(bin:, printer:, source: :restock_select_bin)
+    super(printer: printer, source: source)
+    self.bin = bin
   end
 
   protected
@@ -33,11 +33,12 @@ class RestockProductMenu < ApplicationMenu
   end
 
   def dispatch
-    bin.fill(product: product.undecorated)
+    bin.fill(product: product.obj)
 
+    # TODO: copy to a decorator
     raise ReturnToMainMenu, <<~STR
       Filling bin #{bin} with #{product.name}...
-      #{Color.success("Bin #{bin} is filled.")}
+      #{color.success("Bin #{bin} is filled.")}
     STR
   end
 end

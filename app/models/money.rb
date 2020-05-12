@@ -8,15 +8,15 @@ require "utils/currency"
 
 class Money < ApplicationRecord
   VALID_DENOMINATIONS = [
-    2.00,
-    1.00,
-    0.50,
-    0.20,
-    0.10,
-    0.05,
-    0.02,
-    0.01,
-  ].map { |amt| Currency.to_int(amt) }.freeze
+    2_00,
+    1_00,
+    50,
+    20,
+    10,
+    5,
+    2,
+    1,
+  ].freeze
 
   validates :denomination_value,
             presence: true,
@@ -30,13 +30,6 @@ class Money < ApplicationRecord
 
   def self.till_values
     pluck(:denomination_value, :quantity).to_h
-  end
-
-  # the till, as decimals
-  def self.till
-    pluck(:denomination_value, :quantity)
-      .map { |val, qty| [Currency.to_dec(val), qty] }
-      .to_h
   end
 
   def self.add_to_till!(value_counts:)

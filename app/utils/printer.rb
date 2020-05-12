@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "singleton"
+
 class Printer
   attr_accessor :out
   include Singleton
