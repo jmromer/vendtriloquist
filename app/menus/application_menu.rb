@@ -13,7 +13,7 @@ class ApplicationMenu
 
   def read
     loop do
-      raise ReturnToMainMenu, no_options_message if options&.empty?
+      raise ReturnToMain, no_options_message if options&.empty?
 
       out.puts main_message(result_message)
       self.input = Readline.readline(prompt(menu_name))&.strip

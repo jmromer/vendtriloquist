@@ -6,7 +6,7 @@ require "menus/purchase_menu"
 require "menus/restock_bin_menu"
 
 module VendingMachine
-  def self.router(target = nil, **kwargs)
+  def self.router(target = :main, **kwargs)
     DB.connect
     printer = kwargs.fetch(:printer)
 
@@ -21,11 +21,11 @@ module VendingMachine
   rescue Back => e
     kwargs.delete(:source)
     router(e.to_s, **kwargs)
-  rescue Dispatch => e
+  rescue Route => e
     router(e.to_s, **kwargs)
   rescue Interrupt => e
     router(e.to_s, **kwargs)
-  rescue ReturnToMainMenu => e
+  rescue ReturnToMain => e
     printer.puts(e)
     router(:main, **kwargs)
   end

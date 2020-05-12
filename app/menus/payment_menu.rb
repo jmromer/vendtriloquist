@@ -32,9 +32,9 @@ class PaymentMenu < ApplicationMenu
   def dispatch
     payment_value = currency.to_int(selected_payment)
     self.result_message = payment.process!(value: payment_value)
-    raise ReturnToMainMenu, result_message
+    raise ReturnToMain, result_message
   rescue InsufficientChange, PaymentFailure => e
-    raise ReturnToMainMenu, e.to_s
+    raise ReturnToMain, e.to_s
   rescue BalanceRemaining => e
     self.result_message = e.to_s
     nil

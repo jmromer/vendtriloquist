@@ -20,6 +20,6 @@ class MainMenu < ApplicationMenu
   end
 
   def dispatch
-    raise Dispatch, selection
+    raise Route, selection
   end
 end

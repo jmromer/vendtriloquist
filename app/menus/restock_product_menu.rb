@@ -30,6 +30,6 @@ class RestockProductMenu < ApplicationMenu
 
   def dispatch
     bin.fill(product: product.obj)
-    raise ReturnToMainMenu, decorator.success_message(bin.index, product.name)
+    raise ReturnToMain, decorator.success_message(bin.index, product.name)
   end
 end
