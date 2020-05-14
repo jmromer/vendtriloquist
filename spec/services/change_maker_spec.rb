@@ -5,7 +5,7 @@ require "services/change_maker"
 
 RSpec.describe ChangeMaker, type: :service do
   describe ".render_change" do
-    it "returns a hash of mapping denomination to quantity of change" do
+    it "returns a hash mapping denomination to quantity of change" do
       till = {
         25 => 1,
         10 => 1,
@@ -20,7 +20,7 @@ RSpec.describe ChangeMaker, type: :service do
         9 => 1,
         6 => 1,
         5 => 1,
-        1 => 1,
+        1 => 2,
       }
       result = ChangeMaker.render_change(11, till)
       expect(result).to eq({ 6 => 1, 5 => 1 })
